@@ -1,0 +1,18 @@
+header {
+  background-color: #ccc;
+  text-align: center;
+}
+#destaques {
+  background-color: #f00;
+}
+.texto {
+  color: #00f;
+}
+[type=text] {
+  background-color: #0f0;
+}
+nav a {
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #000;
+}
