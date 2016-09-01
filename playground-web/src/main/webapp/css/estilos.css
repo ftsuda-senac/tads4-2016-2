@@ -1,18 +1,98 @@
 header {
-  background-color: #ccc;
+  text-align: center;
+  padding: 10px;
+  background-color: #843c0c;
+}
+header img {
+  height: 70px;
+}
+nav {
+  display: block;
   text-align: center;
 }
-#destaques {
-  background-color: #f00;
+
+nav li {
+  display: inline;
+  list-style-type: none;
 }
-.texto {
-  color: #00f;
+nav li > a {
+  padding: 10px 20px;
+  border-right: 1px solid #fff;
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  }
+nav li:last-child > a {
+  border-right: none;
 }
-[type=text] {
-  background-color: #0f0;
+
+nav li:hover > a {
+  background-color: #999;
 }
-nav a {
-  margin: 10px;
-  padding: 20px;
-  border: 1px solid #000;
+
+#carousel {
+  display: block;
+  height: 500px;
+  overflow: hidden;
+}
+
+#carousel img {
+  width: 100%;
+}
+
+#sobre {
+  text-align: center;
+}
+.secao {
+  width: 70%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+#contato h1 {
+  text-align: center;
+}
+#contato form > div {
+  padding: 3px;
+}
+#contato form > div > label {
+  display: inline-block;
+  width: 25%;
+  text-align: right;
+}
+#contato form > div > input,
+#contato form > div > select,
+#contato form > div > textarea {
+  display: inline-block;
+  width: 70%;
+}
+
+#contato form > div.botao {
+  text-align: center;
+}
+
+#contato form > div.botao > input[type='submit'] {
+  width: 120px;
+}
+
+footer {
+  text-align: center;
+  padding: 5px;
+  background-color: #444;
+  color: #fff;
+}
+
+/* Estilos usados para testes javascript */
+#titulo {
+  /*transition: all 0.5s ease;*/
+}
+.info {
+  transition: all 0.8s ease;
+  border: 2px solid #333;
+  border-radius: 5px;
+  margin: 20px 100px;
+  padding: 10px 30px;
+}
+
+.info-selecionado {
+  background-color: goldenrod;
 }
