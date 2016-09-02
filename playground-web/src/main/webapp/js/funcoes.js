@@ -8,7 +8,7 @@ var documentReady = function (fn) {
   } else {
     document.addEventListener('DOMContentLoaded', fn);
   }
-}
+};
 
 // http://flatuicolors.com/
 var cores = ["#1dd2af", "#3498db", "#9b59b6", "#f1c40f", "#e67e22", "#e74c3c"];
@@ -114,10 +114,12 @@ documentReady(function () {
   });
 
   // 5) Validacao de formulario
-  document.getElementsByTagName("form")[0].addEventListener("submit", function (ev) {
+  document.getElementsByTagName("form")[0]
+          .addEventListener("submit", function (ev) {
     var nome = this.nome;
     var email = this.email;
-    if (nome.value != "" && nome.value != null && email.value != "" && email.value != null) {
+    if (nome.value != "" && nome.value != null 
+            && email.value != "" && email.value != null) {
       return true;
     }
     alert("Preencha os campos");

@@ -22,7 +22,7 @@ $(function () { // Abreviação para $(document).ready(function() { ... });
   }, 500);
 
   // 1) Mostar alert com o nome do curriculo
-  var texto = $("h1").first().text();
+  var texto = $("h1:first").text();
   alert("O texto da tag <h1> é " + texto);
 
   // 2) Adiciona tratamento para os eventos de mouseover (mouse sobre o elemento)
@@ -33,21 +33,23 @@ $(function () { // Abreviação para $(document).ready(function() { ... });
 
   // Associa função ao evento somente nos elementos já carregados,
   // Não associa aos elementos que serão criados.
+  /*
   $(".info").on("mouseover", function (ev) {
     $(this).addClass("info-selecionado");
   }).on("mouseout", function (ev) {
     $(this).removeClass("info-selecionado");
   });
+  */
 
-  /*
+
    // Associa função ao evento nos elementos já carregados
    // E nos elementos que serão criados.
-   $("section").on("mouseover", ".info", function (ev) {
-   $(this).addClass("info-selecionado");
-   }).on("mouseout", ".info", function (ev) {
-   $(this).removeClass("info-selecionado");
-   });
-   */
+  $("#testejs").on("mouseover", ".info", function (ev) {
+    $(this).addClass("info-selecionado");
+  }).on("mouseout", ".info", function (ev) {
+    $(this).removeClass("info-selecionado");
+  });
+
 
   // 3) Adicionar uma nova seção no curriculo ao clicar no botão com id "botao1".
   $("#botao1").click(function (ev) {
@@ -67,6 +69,7 @@ $(function () { // Abreviação para $(document).ready(function() { ... });
     elSection.append(elP);
     $("#area2").append(elSection);
   });
+  
   // 5) Validacao de formulario
   $("form").first().on("submit", function(ev) {
     var nome = this.nome;
@@ -100,22 +103,24 @@ $(function () { // Abreviação para $(document).ready(function() { ... });
     });
   });
 
-  /*
+
    // Versao reduzida.
+   /*
    $.getJSON("AjaxServlet", function (dataJSON) {
    ///console.log(responseText);
    //var data = $.parseJSON(responseText);
-   var htmlDom = "<section class=\"info\"><h2>Dados do contato</h2><ul>" +
-   "<li>ID: " + dataJSON.id + "</li>" +
-   "<li>Nome: " + dataJSON.nome + "</li>" +
-   "<li>E-mail: " + dataJSON.email + "</li>" +
-   "<li>Telefones:<ul>";
-   for (var i = 0; i < dataJSON.telefones.length; i++) {
-   htmlDom = htmlDom + "<li>" + dataJSON.telefones[i].numero + "</li>";
-   }
-   htmlDom = htmlDom + "</ul></li></ul></section>";
-   $("#area3").html(htmlDom);
-   });
-   */
+    var htmlDom = "<section class=\"info\"><h2>Dados do contato</h2><ul>" +
+	    "<li>ID: " + dataJSON.id + "</li>" +
+	    "<li>Nome: " + dataJSON.nome + "</li>" +
+	    "<li>E-mail: " + dataJSON.email + "</li>" +
+	    "<li>Telefones:<ul>";
+    for (var i = 0; i < dataJSON.telefones.length; i++) {
+      htmlDom = htmlDom + "<li>" + dataJSON.telefones[i].numero + "</li>";
+    }
+    htmlDom = htmlDom + "</ul></li></ul></section>";
+    $("#area3").html(htmlDom);
+  });
+  */
+
 
 });
