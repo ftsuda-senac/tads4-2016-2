@@ -21,31 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package br.senac.tads4.lojinha.modelo;
+package br.senac.tads4.lojinha.service;
+
+import br.senac.tads4.lojinha.entidade.Produto;
+import java.util.List;
 
 /**
  *
  * @author fernando.tsuda
  */
-public class Categoria {
+public interface ProdutoService {
   
-  private Integer id;
-  private String nome;
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getNome() {
-    return nome;
-  }
-
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
+  public List<Produto> listar();
   
 }

@@ -23,7 +23,9 @@
  */
 package br.senac.tads4.lojinha.servlet;
 
-import br.senac.tads4.lojinha.modelo.Produto;
+import br.senac.tads4.lojinha.entidade.Produto;
+import br.senac.tads4.lojinha.service.ProdutoService;
+import br.senac.tads4.lojinha.service.fakeimpl.ProdutoServiceFakeImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -82,30 +84,8 @@ public class ListaProdutosServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	  throws ServletException, IOException {
-    List<Produto> produtos = new ArrayList<>();
-    // Cria produto 1
-    Produto p1 = new Produto();
-    p1.setNome("Bolo de chocolate");
-    p1.setDescricao("Descrição do bolo de chocolate");
-    p1.setDtCadastro(new Date());
-    p1.setPreco(new BigDecimal("9.99"));
-    produtos.add(p1); // Adiciona na lista de produtos
-    
-    // Cria produto 2
-    Produto p2 = new Produto();
-    p2.setNome("Torta de maçã");
-    p2.setDescricao("Descrição da torta de maçã");
-    p2.setDtCadastro(new Date());
-    p2.setPreco(new BigDecimal("12.99"));
-    produtos.add(p2); // Adiciona na lista de produtos
-    
-    Produto p3 = new Produto();
-    p3.setNome("Bolo de aniversário");
-    p3.setDescricao("Descrição do bolo de aniversário");
-    p3.setDtCadastro(new Date());
-    p3.setPreco(new BigDecimal("59.99"));
-    produtos.add(p3); // Adiciona na lista de produtos
-    
+    ProdutoService service = new ProdutoServiceFakeImpl();
+    List<Produto> produtos = service.listar();
     HttpSession sessao = request.getSession();
     Integer contador = 0;
     if (sessao.getAttribute("contador") != null) {

@@ -21,31 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package br.senac.tads4.lojinha.modelo;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+package br.senac.tads4.lojinha.entidade;
 
 /**
  *
  * @author fernando.tsuda
  */
-public class Produto {
-
-  private Long id;
+public class Categoria {
+  
+  private Integer id;
   private String nome;
-  private String descricao;
-  private BigDecimal preco;
-  private Date dtCadastro;
-  private List<Categoria> categorias;
-  private List<ImagemProduto> produtos;
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -56,45 +47,5 @@ public class Produto {
   public void setNome(String nome) {
     this.nome = nome;
   }
-
-  public String getDescricao() {
-    return descricao;
-  }
-
-  public void setDescricao(String descricao) {
-    this.descricao = descricao;
-  }
-
-  public BigDecimal getPreco() {
-    return preco;
-  }
-
-  public void setPreco(BigDecimal preco) {
-    this.preco = preco;
-  }
-
-  public Date getDtCadastro() {
-    return dtCadastro;
-  }
-
-  public void setDtCadastro(Date dtCadastro) {
-    this.dtCadastro = dtCadastro;
-  }
-
-  public List<Categoria> getCategorias() {
-    return categorias;
-  }
-
-  public void setCategorias(List<Categoria> categorias) {
-    this.categorias = categorias;
-  }
-
-  public List<ImagemProduto> getProdutos() {
-    return produtos;
-  }
-
-  public void setProdutos(List<ImagemProduto> produtos) {
-    this.produtos = produtos;
-  }
-
+  
 }
