@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 fernando.tsuda.
+ * Copyright 2016 Fernando.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package br.senac.tads4.lojinha.service;
+package br.senac.tads4.lojinha.service.fakeimpl;
 
 import br.senac.tads4.lojinha.entidade.Categoria;
-import br.senac.tads4.lojinha.entidade.Produto;
+import br.senac.tads4.lojinha.service.CategoriaService;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
- * @author fernando.tsuda
+ * @author Fernando
  */
-public interface ProdutoService {
+public class CategoriaServiceFakeImpl implements CategoriaService {
 
-  public List<Produto> listar(int offset, int quantidade);
+  private static final Map<Integer, Categoria> MAP_CATEGORIA = new LinkedHashMap<Integer, Categoria>();
 
-  public List<Produto> listarPorCategoria(Categoria categoria, int offset, int quantidade);
+  static {
+    MAP_CATEGORIA.put(1, new Categoria(1, "Bolo"));
+    MAP_CATEGORIA.put(2, new Categoria(2, "Torta"));
+    MAP_CATEGORIA.put(3, new Categoria(3, "Chocolate"));
+    MAP_CATEGORIA.put(4, new Categoria(4, "Morango"));
+    MAP_CATEGORIA.put(5, new Categoria(5, "Light"));
+    MAP_CATEGORIA.put(6, new Categoria(6, "Crocante"));
+    MAP_CATEGORIA.put(7, new Categoria(7, "Abacaxi"));
+    MAP_CATEGORIA.put(8, new Categoria(8, "Coco"));
+  }
 
-  public Produto obter(long idProduto);
+  @Override
+  public List<Categoria> listar() {
+    return new ArrayList<Categoria>(MAP_CATEGORIA.values());
+  }
 
-  public void incluir(Produto p);
-
-  public void alterar(Produto p);
-
-  public void remover(long idProduto);
+  @Override
+  public Categoria obter(int id) {
+    return MAP_CATEGORIA.get(id);
+  }
 }

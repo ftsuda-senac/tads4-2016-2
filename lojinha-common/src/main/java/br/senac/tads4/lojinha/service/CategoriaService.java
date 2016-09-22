@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 fernando.tsuda.
+ * Copyright 2016 Fernando.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,16 @@
 package br.senac.tads4.lojinha.service;
 
 import br.senac.tads4.lojinha.entidade.Categoria;
-import br.senac.tads4.lojinha.entidade.Produto;
 import java.util.List;
 
 /**
  *
- * @author fernando.tsuda
+ * @author Fernando
  */
-public interface ProdutoService {
+public interface CategoriaService {
 
-  public List<Produto> listar(int offset, int quantidade);
+  public List<Categoria> listar();
 
-  public List<Produto> listarPorCategoria(Categoria categoria, int offset, int quantidade);
+  public Categoria obter(int id);
 
-  public Produto obter(long idProduto);
-
-  public void incluir(Produto p);
-
-  public void alterar(Produto p);
-
-  public void remover(long idProduto);
 }

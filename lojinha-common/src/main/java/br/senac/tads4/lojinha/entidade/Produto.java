@@ -23,23 +23,54 @@
  */
 package br.senac.tads4.lojinha.entidade;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
  * @author fernando.tsuda
  */
-public class Produto {
+public class Produto implements Serializable {
 
   private Long id;
+
   private String nome;
+
   private String descricao;
+
   private BigDecimal preco;
+
   private Date dtCadastro;
+
   private List<Categoria> categorias;
-  private List<ImagemProduto> produtos;
+
+  private List<ImagemProduto> imagens;
+
+  //private List<ItemCompra> itensCompra;
+  public Produto() {
+
+  }
+
+  public Produto(Long id, String nome, String descricao, BigDecimal preco, Date dtCadastro) {
+    this.id = id;
+    this.nome = nome;
+    this.descricao = descricao;
+    this.preco = preco;
+    this.dtCadastro = dtCadastro;
+  }
+
+  public Produto(Long id, String nome, String descricao, BigDecimal preco, Date dtCadastro, List<ImagemProduto> imagens, List<Categoria> categorias) {
+    this.id = id;
+    this.nome = nome;
+    this.descricao = descricao;
+    this.preco = preco;
+    this.dtCadastro = dtCadastro;
+    this.imagens = imagens;
+    this.categorias = categorias;
+  }
 
   public Long getId() {
     return id;
@@ -89,12 +120,47 @@ public class Produto {
     this.categorias = categorias;
   }
 
-  public List<ImagemProduto> getProdutos() {
-    return produtos;
+  public List<ImagemProduto> getImagens() {
+    return imagens;
   }
 
-  public void setProdutos(List<ImagemProduto> produtos) {
-    this.produtos = produtos;
+  public void setImagens(List<ImagemProduto> imagens) {
+    this.imagens = imagens;
+  }
+//
+//  public List<ItemCompra> getItensCompra() {
+//    return itensCompra;
+//  }
+//
+//  public void setItensCompra(List<ItemCompra> itensCompra) {
+//    this.itensCompra = itensCompra;
+//  }
+
+  @Override
+  public String toString() {
+    return "Produto{" + "id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", preco=" + preco + ", dtCadastro=" + dtCadastro + ", categorias=" + categorias + ", imagens=" + imagens + '}';
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 89 * hash + Objects.hashCode(this.id);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Produto other = (Produto) obj;
+    if (!Objects.equals(this.id, other.id)) {
+      return false;
+    }
+    return true;
   }
 
 }

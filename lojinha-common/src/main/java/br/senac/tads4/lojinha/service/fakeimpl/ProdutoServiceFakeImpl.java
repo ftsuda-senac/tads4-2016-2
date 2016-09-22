@@ -23,12 +23,18 @@
  */
 package br.senac.tads4.lojinha.service.fakeimpl;
 
+import br.senac.tads4.lojinha.entidade.Categoria;
+import br.senac.tads4.lojinha.entidade.ImagemProduto;
 import br.senac.tads4.lojinha.entidade.Produto;
+import br.senac.tads4.lojinha.service.CategoriaService;
 import br.senac.tads4.lojinha.service.ProdutoService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -36,33 +42,86 @@ import java.util.List;
  */
 public class ProdutoServiceFakeImpl implements ProdutoService {
 
-  @Override
-  public List<Produto> listar() {
-    List<Produto> produtos = new ArrayList<>();
-    // Cria produto 1
-    Produto p1 = new Produto();
-    p1.setNome("Bolo de chocolate");
-    p1.setDescricao("Descrição do bolo de chocolate");
-    p1.setDtCadastro(new Date());
-    p1.setPreco(new BigDecimal("9.99"));
-    produtos.add(p1); // Adiciona na lista de produtos
-    
-    // Cria produto 2
-    Produto p2 = new Produto();
-    p2.setNome("Torta de maçã");
-    p2.setDescricao("Descrição da torta de maçã");
-    p2.setDtCadastro(new Date());
-    p2.setPreco(new BigDecimal("12.99"));
-    produtos.add(p2); // Adiciona na lista de produtos
-    
-    Produto p3 = new Produto();
-    p3.setNome("Bolo de aniversário");
-    p3.setDescricao("Descrição do bolo de aniversário");
-    p3.setDtCadastro(new Date());
-    p3.setPreco(new BigDecimal("59.99"));
-    produtos.add(p3); // Adiciona na lista de produtos
-    
-    return produtos;
+  private static final Map<Long, Produto> MAPA_PRODUTOS = new LinkedHashMap<Long, Produto>();
+
+  private static final String DESCRICAO_PADRAO = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+          + "Aenean vel ipsum vehicula, venenatis leo nec, ornare felis. Ut consectetur est vel pulvinar tempus. "
+          + "Suspendisse commodo cursus turpis. Etiam ac enim egestas, sollicitudin libero ac, eleifend risus. "
+          + "Phasellus nec posuere magna, in vehicula elit. "
+          + "Etiam rhoncus, ipsum eget dapibus vulputate, massa nisi feugiat odio, a consectetur urna diam id risus. "
+          + "Morbi sed pharetra nisl, nec aliquam ex. Morbi congue urna ut semper aliquam. "
+          + "Sed aliquet turpis ac sem egestas dignissim. Praesent interdum dapibus cursus. "
+          + "Cras posuere tempor lectus, ac porttitor tellus maximus vel.";
+
+  static {
+    CategoriaService categorias = new CategoriaServiceFakeImpl();
+    Produto produto = new Produto(1L, "Floresta negra",
+            DESCRICAO_PADRAO,
+            new BigDecimal(100), new Date(),
+            Arrays.asList(new ImagemProduto(1L, "Bla bla bla", "imagem01a.jpg"), new ImagemProduto(2L, "Xpto Xpto", "imagem01b.jpg"), new ImagemProduto(3L, "Chola mais", "imagem01c.jpg")),
+            Arrays.asList(categorias.obter(1), categorias.obter(3)));
+    MAPA_PRODUTOS.put(produto.getId(), produto);
+    produto = new Produto(2L, "Torta de morango",
+            DESCRICAO_PADRAO,
+            new BigDecimal(90), new Date(),
+            Arrays.asList(new ImagemProduto(4L, "Bla bla bla", "imagem02a.jpg"), new ImagemProduto(5L, "Xpto Xpto", "imagem02b.jpg")),
+            Arrays.asList(categorias.obter(1), categorias.obter(3)));
+    MAPA_PRODUTOS.put(produto.getId(), produto);
+    produto = new Produto(3L, "Sonho de valsa",
+            DESCRICAO_PADRAO,
+            new BigDecimal(110), new Date(),
+            Arrays.asList(new ImagemProduto(6L, "Bla bla bla", "imagem03a.jpg")),
+            Arrays.asList(categorias.obter(1), categorias.obter(3), categorias.obter(6)));
+    MAPA_PRODUTOS.put(produto.getId(), produto);
+    produto = new Produto(4L, "Morango com leite condensado",
+            DESCRICAO_PADRAO,
+            new BigDecimal(105), new Date(),
+            Arrays.asList(new ImagemProduto(7L, "Bla bla bla", "imagem04a.jpg"), new ImagemProduto(8L, "Xpto Xpto", "imagem04b.jpg")),
+            Arrays.asList(categorias.obter(1), categorias.obter(4)));
+    MAPA_PRODUTOS.put(produto.getId(), produto);
+    produto = new Produto(5L, "Abacaxi com coco",
+            DESCRICAO_PADRAO,
+            new BigDecimal(85), new Date(),
+            Arrays.asList(new ImagemProduto(9L, "Bla bla bla", "imagem04a.jpg"), new ImagemProduto(10L, "Xpto Xpto", "imagem04b.jpg")),
+            Arrays.asList(categorias.obter(1), categorias.obter(5), categorias.obter(7), categorias.obter(8)));
+    MAPA_PRODUTOS.put(produto.getId(), produto);
   }
-  
+
+  @Override
+  public List<Produto> listar(int offset, int quantidade) {
+    return new ArrayList<Produto>(MAPA_PRODUTOS.values());
+  }
+
+  @Override
+  public List<Produto> listarPorCategoria(Categoria categoria, int offset, int quantidade) {
+    List<Produto> lista = new ArrayList<Produto>();
+    for (Map.Entry<Long, Produto> entry : MAPA_PRODUTOS.entrySet()) {
+      Produto p = entry.getValue();
+      if (p.getCategorias().contains(categoria)) {
+        lista.add(p);
+      }
+    }
+    return lista;
+  }
+
+  @Override
+  public Produto obter(long idProduto) {
+    return MAPA_PRODUTOS.get(idProduto);
+  }
+
+  @Override
+  public void incluir(Produto p) {
+    // new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void alterar(Produto p) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void remover(long idProduto) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
 }

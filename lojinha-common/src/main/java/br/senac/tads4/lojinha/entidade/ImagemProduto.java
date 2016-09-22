@@ -23,15 +23,31 @@
  */
 package br.senac.tads4.lojinha.entidade;
 
+import java.io.Serializable;
+
 /**
  *
  * @author fernando.tsuda
  */
-public class ImagemProduto {
-  
+public class ImagemProduto implements Serializable {
+
   private Long id;
+
   private String nomeArquivo;
-  private String titulo;
+
+  private String legenda;
+
+  private Produto produto;
+
+  public ImagemProduto() {
+
+  }
+
+  public ImagemProduto(Long id, String nomeArquivo, String legenda) {
+    this.id = id;
+    this.nomeArquivo = nomeArquivo;
+    this.legenda = legenda;
+  }
 
   public Long getId() {
     return id;
@@ -49,12 +65,29 @@ public class ImagemProduto {
     this.nomeArquivo = nomeArquivo;
   }
 
-  public String getTitulo() {
-    return titulo;
+  public String getLegenda() {
+    return legenda;
   }
 
-  public void setTitulo(String titulo) {
-    this.titulo = titulo;
+  public void setLegenda(String legenda) {
+    this.legenda = legenda;
   }
-  
+
+  public Produto getProduto() {
+    return produto;
+  }
+
+  public void setProduto(Produto produto) {
+    this.produto = produto;
+  }
+
+  public String getUrlArquivo() {
+    return "http://localhost:8080/imagens/" + nomeArquivo;
+  }
+
+  @Override
+  public String toString() {
+    return "ImagemProduto{" + "id=" + id + ", legenda=" + legenda + ", nomeArquivo=" + nomeArquivo + '}';
+  }
+
 }
