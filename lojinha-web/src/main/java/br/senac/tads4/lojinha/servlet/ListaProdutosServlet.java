@@ -85,7 +85,7 @@ public class ListaProdutosServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	  throws ServletException, IOException {
     ProdutoService service = new ProdutoServiceFakeImpl();
-    List<Produto> produtos = service.listar();
+    List<Produto> produtos = service.listar(0, 100);
     HttpSession sessao = request.getSession();
     Integer contador = 0;
     if (sessao.getAttribute("contador") != null) {
