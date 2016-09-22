@@ -26,6 +26,7 @@ package br.senac.tads4.lojinha.managedbean;
 import br.senac.tads4.lojinha.entidade.Produto;
 import br.senac.tads4.lojinha.service.ProdutoService;
 import br.senac.tads4.lojinha.service.fakeimpl.ProdutoServiceFakeImpl;
+import java.io.Serializable;
 import java.util.List;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -34,24 +35,46 @@ import javax.enterprise.context.RequestScoped;
  *
  * @author fernando.tsuda
  */
-@Named(value = "produtoBean")
+@Named
 @RequestScoped
-public class ProdutoBean {
+public class ProdutoBean implements Serializable {
 
-  /**
-   * Creates a new instance of ProdutoBean
-   */
+  // @ManagedProperty permite associar um parametro passado na requisição
+  // Só funciona se bean usar @ManagedBean
+  // Se não usar, tem que obter usando o FacesContext.getCurrentInstance.getRequestParameterMap()
+  private Long idProduto;
+
   public ProdutoBean() {
   }
-  
-  public String getMensagem() {
-    return "Hello world JSF";
-  }
-  
-  public List<Produto> getProdutos() {
+
+  public List<Produto> getLista() {
     ProdutoService service = new ProdutoServiceFakeImpl();
-    return service.listar();
+    //Categoria cat = new Categoria(2, "teste");
+    return service.listar(0, 1000);
   }
-  
-  
+
+  public Produto getProduto() {
+    //FacesContext fc = FacesContext.getCurrentInstance();
+    //return obter(getIdParam(fc));
+    return obter(getIdProduto());
+  }
+
+  private Produto obter(long idProduto) {
+    ProdutoService service = new ProdutoServiceFakeImpl();
+    return service.obter(idProduto);
+  }
+
+//    private Long getIdParam(FacesContext fc) {
+//        Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+//        return Long.parseLong(params.get("id"));
+//    }
+
+  public Long getIdProduto() {
+    return idProduto;
+  }
+
+  public void setIdProduto(Long idProduto) {
+    this.idProduto = idProduto;
+  }
+
 }
