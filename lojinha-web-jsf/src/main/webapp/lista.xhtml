@@ -20,6 +20,10 @@
         </div>
       </header>
       <div class="row">
+	<p>
+	  Qtde itens no carrinho: 
+	  <h:outputText value="#{compraBean.quantidadeItens}" />
+	</p>
         <nav class="col-md-2 hidden-sm hidden-xs">
           <h3>Categorias</h3>
           <ul class="list-group">
@@ -37,7 +41,7 @@
           -->
           <ui:fragment rendered="#{flash.mensagem != null}">
             <div class="alert alert-#{flash.mensagem.tipo}" role="alert">
-              <p>#{flash.mensagem.msg}</p>
+              <p><h:outputText value="#{flash.mensagem.msg}" /></p>
             </div>
           </ui:fragment>
           <div class="row">
@@ -56,7 +60,9 @@
                     <div class="row">
                       <div class="col-sm-8">
                         <h:form prependId="false">
-                          <h:commandButton action="#{compraBean.adicionarProduto(prod.id, 1)}" styleClass="btn btn-success btn-lg btn-block" pt:role="button" value="Comprar" />
+                          <h:commandButton action="#{compraBean.adicionarProduto(prod.id, 1)}" 
+					   styleClass="btn btn-success btn-lg btn-block" 
+					   pt:role="button" value="Comprar" />
                         </h:form>
                       </div>
                       <div class="col-sm-4">

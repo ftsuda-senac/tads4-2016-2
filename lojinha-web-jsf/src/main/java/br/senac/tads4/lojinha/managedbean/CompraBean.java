@@ -23,65 +23,63 @@
  */
 package br.senac.tads4.lojinha.managedbean;
 
+import br.senac.tads4.lojinha.entidade.ProdutoQuantidade;
 import br.senac.tads4.lojinha.entidade.Produto;
 import br.senac.tads4.lojinha.service.ProdutoService;
 import br.senac.tads4.lojinha.service.fakeimpl.ProdutoServiceFakeImpl;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import br.senac.tads4.lojinha.util.Mensagem;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 /**
  *
  * @author fernando.tsuda
  */
 @Named
-@RequestScoped
-public class ProdutoBean implements Serializable {
-
-  private Long idProduto;
+@SessionScoped
+public class CompraBean implements Serializable {
   
-  private Produto produto = null;
+  Set<ProdutoQuantidade> listaProdutos = 
+	  new LinkedHashSet<ProdutoQuantidade>();
 
-  public ProdutoBean() {
+  public CompraBean() {
   }
-
-  public List<Produto> getLista() {
+  
+  public String adicionarProduto(long idProduto, int quantidade) {
     ProdutoService service = new ProdutoServiceFakeImpl();
-    return service.listar(0, 1000);
-  }
-
-  public Produto getProduto() {
-    if (produto == null) {
-      // FacesContext: objeto que contém todas as informações relacionadas ao
-      // processamento da requisição e geração da resposta dentro do ciclo do
-      // JSF
-      // http://docs.oracle.com/javaee/6/api/javax/faces/context/FacesContext.html
-      FacesContext fc = FacesContext.getCurrentInstance();
-      produto = obter(getIdParam(fc));
+    Produto p = service.obter(idProduto);
+    
+    ProdutoQuantidade pq = null;
+    for (ProdutoQuantidade item : listaProdutos) {
+      if (item.getProduto().equals(p)) {
+	pq = item;
+	break;
+      }
     }
-    return produto;
-  }
+    if (pq == null) {
+      pq = new ProdutoQuantidade(p, quantidade);
+      listaProdutos.add(pq);
+    } else {
+      pq.setQuantidade(pq.getQuantidade() + quantidade);
+    }
+    
+    // Montar mensagem a ser apresentada para usuario
+    Flash mensagem = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+    mensagem.put("mensagem", new Mensagem("Produto " + p.getNome()  + " adicionado com sucesso", "success"));
 
-  private Produto obter(long idProduto) {
-    ProdutoService service = new ProdutoServiceFakeImpl();
-    return service.obter(idProduto);
+    // Redirecionar para lista de produtos
+    return "lista.xhtml?faces-redirect=true";
   }
-
-  private Long getIdParam(FacesContext fc) {
-    Map<String, String> params = fc.getExternalContext()
-	    .getRequestParameterMap();
-    return Long.parseLong(params.get("id"));
+  
+  public int getQuantidadeItens() {
+    return listaProdutos.size();
   }
-
-  public Long getIdProduto() {
-    return idProduto;
-  }
-
-  public void setIdProduto(Long idProduto) {
-    this.idProduto = idProduto;
-  }
-
+  
 }
