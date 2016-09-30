@@ -25,12 +25,15 @@ package br.senac.tads4.lojinha.managedbean;
 
 import br.senac.tads4.lojinha.entidade.ProdutoQuantidade;
 import br.senac.tads4.lojinha.entidade.Produto;
+import br.senac.tads4.lojinha.entidade.Usuario;
 import br.senac.tads4.lojinha.service.ProdutoService;
 import br.senac.tads4.lojinha.service.fakeimpl.ProdutoServiceFakeImpl;
 import br.senac.tads4.lojinha.util.Mensagem;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -82,4 +85,18 @@ public class CompraBean implements Serializable {
     return listaProdutos.size();
   }
   
+  public List<ProdutoQuantidade> getItens() {
+    List<ProdutoQuantidade> itens = new ArrayList<ProdutoQuantidade>();
+    itens.addAll(listaProdutos);
+    return itens;
+  }
+  
+  public BigDecimal getValorTotal() {
+    BigDecimal total = new  BigDecimal(BigInteger.ZERO);
+    for (ProdutoQuantidade pq : listaProdutos) {
+      total = total.add(pq.getPreco());
+    }
+    return total;
+  }
+
 }
