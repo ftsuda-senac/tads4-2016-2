@@ -9,9 +9,8 @@
     <title>Cake Web TADS4</title>
   </h:head>
   <h:body>
-    <ui:composition template="modelo.xhtml">
+    <ui:composition template="/WEB-INF/modelo/modelo.xhtml">
       <ui:define name="conteudo">
-
           <ui:fragment rendered="#{flash.mensagem != null}">
             <div class="alert alert-#{flash.mensagem.tipo}" role="alert">
               <p><h:outputText value="#{flash.mensagem.msg}" /></p>
