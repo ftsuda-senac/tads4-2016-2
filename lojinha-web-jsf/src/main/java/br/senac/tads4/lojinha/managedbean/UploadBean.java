@@ -10,15 +10,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import javax.servlet.http.Part;
 
 /**
  *
  * @author Fernando
  */
-public class UploadBean {
+public class UploadBean implements Serializable {
 
   private Part imagem;
+
+  public String salvarImagem() {
+    String nomeArquivo = obterNomeArquivo();
+    if (nomeArquivo != null && nomeArquivo.trim().length() > 0) {
+      salvarArquivo(nomeArquivo);
+    }
+    return nomeArquivo;
+
+  }
 
   private String obterNomeArquivo() {
     if (imagem != null) {
@@ -40,10 +50,10 @@ public class UploadBean {
     return null;
   }
 
-  private void salvarImagem(String nomeImagem) {
+  private void salvarArquivo(String nomeArquivo) {
     String diretorioDestino = "C:" + File.separator + "desenv"
             + File.separator + "imagens" + File.separator;
-    File arquivo = new File(diretorioDestino + nomeImagem);
+    File arquivo = new File(diretorioDestino + nomeArquivo);
 
     InputStream inputStream = null;
     OutputStream outputStream = null;
