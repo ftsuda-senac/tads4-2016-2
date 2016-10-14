@@ -11,23 +11,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.servlet.http.Part;
 
 /**
  *
  * @author Fernando
  */
+@Named
+@ViewScoped
 public class UploadBean implements Serializable {
 
   private Part imagem;
-
-  public String salvarImagem() {
-    String nomeArquivo = obterNomeArquivo();
+  
+  private String nomeArquivo;
+  
+  public void salvarImagem() {
+    nomeArquivo = obterNomeArquivo();
     if (nomeArquivo != null && nomeArquivo.trim().length() > 0) {
       salvarArquivo(nomeArquivo);
     }
-    return nomeArquivo;
-
   }
 
   private String obterNomeArquivo() {
@@ -59,7 +63,7 @@ public class UploadBean implements Serializable {
     OutputStream outputStream = null;
 
     try {
-      inputStream = getImagem().getInputStream();
+      inputStream = imagem.getInputStream();
       outputStream = new FileOutputStream(arquivo);
 
       int read = 0;
@@ -93,6 +97,14 @@ public class UploadBean implements Serializable {
 
   public void setImagem(Part imagem) {
     this.imagem = imagem;
+  }
+  
+  public boolean isUploadRealizado() {
+    return (nomeArquivo != null && nomeArquivo.length() > 0);
+  }
+  
+  public String getUrlImagem() {
+    return "http://localhost:8080/imagens/" + nomeArquivo;
   }
 
 }
