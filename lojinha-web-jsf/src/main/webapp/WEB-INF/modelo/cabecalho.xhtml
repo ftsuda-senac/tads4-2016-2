@@ -9,9 +9,20 @@
   <h:body>
     <ui:composition>
       <header class="row" style="">
-        <div class="col-xs-12">
+        <div class="col-md-8">
           <h1>Cake Web TADS4</h1>
         </div>
+	<div class="col-md-4">
+	  <ui:fragment rendered="#{autenticacaoBean.autenticado}">
+	    <h3>#{autenticacaoBean.usuario.nome}</h3>
+	    <h:form prependId="false">
+	      <h:commandButton value="Sair" action="#{autenticacaoBean.sair()}" />
+	    </h:form>
+	  </ui:fragment>
+	  <ui:fragment rendered="#{!autenticacaoBean.autenticado}">
+	    <h3><h:outputLink value="login.xhtml">Fazer login</h:outputLink></h3>
+	  </ui:fragment>
+	</div>
       </header>
     </ui:composition>
   </h:body>
