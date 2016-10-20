@@ -38,33 +38,35 @@ public class AutorizacaoFilter implements PhaseListener {
 
   @Override
   public void afterPhase(PhaseEvent event) {
-    
+
   }
 
   @Override
   public void beforePhase(PhaseEvent event) {
-    FacesContext facesContext = event.getFacesContext();
+    FacesContext fc = FacesContext.getCurrentInstance();
+
+    String paginaAtual = fc.getViewRoot().toString();
     
-    String paginaAtual = facesContext.getViewRoot().getViewId();
-    
-    NavigationHandler nh = facesContext
+    //String paginaAtual = facesContext.getViewRoot().getViewId();
+
+    NavigationHandler nh = fc
 	    .getApplication().getNavigationHandler();
-    
-    //HttpServletRequest req = 
-//	    (HttpServletRequest) facesContext
-//		    .getExternalContext()
-//		    .getRequest();
-    
-//    System.out.println("Pagina atual: " + paginaAtual 
-//	    + " ip:" + req.getRemoteAddr());
-    
-    nh.handleNavigation(facesContext, null, "usuario-form.xhtml?faces-redirect=true");
-    
+
+    HttpServletRequest req
+	    = (HttpServletRequest) fc
+	    .getExternalContext()
+	    .getRequest();
+
+    System.out.println("Pagina atual: " + paginaAtual
+	    + " ip:" + req.getRemoteAddr());
+
+    nh.handleNavigation(fc, null, "/usuario-form.xhtml?faces-redirect=true");
+
   }
 
   @Override
   public PhaseId getPhaseId() {
     return PhaseId.RESTORE_VIEW;
   }
-  
+
 }
