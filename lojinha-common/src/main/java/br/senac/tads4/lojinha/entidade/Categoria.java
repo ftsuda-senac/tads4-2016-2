@@ -26,17 +26,32 @@ package br.senac.tads4.lojinha.entidade;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author fernando.tsuda
  */
+@Entity
+@Table(name = "TB_CATEGORIA")
 public class Categoria implements Serializable {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID_CATEGORIA")
   private Integer id;
 
+  @Column(name = "NM_CATEGORIA", unique = true, nullable = false)
   private String nome;
 
+  @ManyToMany(mappedBy = "categorias", fetch = FetchType.LAZY)
   private List<Produto> produtos;
 
   public Categoria() {

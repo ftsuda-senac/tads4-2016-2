@@ -28,26 +28,63 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
  * @author fernando.tsuda
  */
+@Entity
+@Table(name = "TB_PRODUTO")
 public class Produto implements Serializable {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID_PRODUTO")
   private Long id;
 
+  @Column(name = "NM_PRODUTO", nullable = false)
   private String nome;
 
+  @Column(name = "DS_PRODUTO")
   private String descricao;
 
+  @Column(name = "VL_PRODUTO", precision = 12, 
+	  scale = 2, nullable = false)
   private BigDecimal preco;
 
+  @Column(name = "DT_CADASTRO", nullable = false)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date dtCadastro;
 
+  @ManyToMany
+  @JoinTable(name = "TB_PRODUTO_CATEGORIA",
+	  joinColumns = {
+	    @JoinColumn(name = "ID_PRODUTO")
+	  },
+	  inverseJoinColumns = {
+	    @JoinColumn(name = "ID_CATEGORIA")
+	  }
+  )
   private List<Categoria> categorias;
 
+  @OneToMany(mappedBy = "produto")
   private List<ImagemProduto> imagens;
+  
+  @Transient
+  private String observacoes;
 
   //private List<ItemCompra> itensCompra;
   public Produto() {
