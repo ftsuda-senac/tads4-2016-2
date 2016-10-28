@@ -141,12 +141,14 @@ public class ProdutoServiceJPAImpl implements ProdutoService {
     try {
       transacao.begin();
       Produto p = em.find(Produto.class, idProduto);
-      List<ImagemProduto> imagens = p.getImagens();
-      for (Iterator<ImagemProduto> i = imagens.iterator(); 
-	      i.hasNext(); ) {
-	ImagemProduto imagem = i.next();
-	em.remove(imagem);
-      }
+      // Código desnecessário, pois é executado pela configuração
+      // cascade na classe Produto
+//      List<ImagemProduto> imagens = p.getImagens();
+//      for (Iterator<ImagemProduto> i = imagens.iterator(); 
+//	      i.hasNext(); ) {
+//	ImagemProduto imagem = i.next();
+//	em.remove(imagem);
+//      }
       p.setCategorias(null);
       em.remove(p);
       transacao.commit();
