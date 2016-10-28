@@ -10,10 +10,17 @@
   <h:body>
     <ui:composition template="/WEB-INF/modelo/modelo.xhtml">
       <ui:define name="conteudo">
-	<h:graphicImage name="img/bolo.jpg" alt="Imagem do bolo" styleClass="img-responsive" />
-	<div class="caption">
+	<h:graphicImage url="http://localhost:8080/imagens/#{produtoBean.produto.imagens[0].nomeArquivo}" 
+			alt="#{produtoBean.produto.imagens[0].legenda}" 
+			styleClass="img-responsive" />	<div class="caption">
 	  <h2><h:outputText value="#{produtoBean.produto.nome}" /></h2>
 	  <p><h:outputText value="#{produtoBean.produto.descricao}" /></p>
+	  <div>
+	    <h3>Categorias</h3>
+	    <ui:repeat value="#{produtoBean.produto.categorias}" var="cat">
+	      <span><h:outputText value="#{cat.nome}" /></span>
+	    </ui:repeat>
+	  </div>
 	  <h3>
 	    <h:outputText value="#{produtoBean.produto.preco}">
 	      <f:convertNumber type="currency" locale="pt-BR" />
@@ -22,9 +29,17 @@
 	  <h:form prependId="false">
 	    <h:commandButton
 	      action="#{compraBean.adicionarProduto(produtoBean.produto.id, 1)}"
+	      styleClass="btn btn-success btn-lg btn-block"
 	      value="Comprar">
 	      <f:param name="id" value="#{produtoBean.produto.id}" />
 	    </h:commandButton>
+	    
+	    <h:commandButton
+	      action="#{produtoBean.remover(produtoBean.produto.id)}"
+	      value="Apagar">
+	      <f:param name="id" value="#{produtoBean.produto.id}" />
+	    </h:commandButton>
+	    
 	  </h:form>
 	</div>
       </ui:define>

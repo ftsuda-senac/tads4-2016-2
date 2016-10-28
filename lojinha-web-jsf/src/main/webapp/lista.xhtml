@@ -20,7 +20,9 @@
             <ui:repeat value="#{produtoBean.lista}" var="prod">
               <div class="col-sm-6">
                 <div class="thumbnail">
-                  <h:graphicImage name="img/bolo.jpg" alt="Imagem do bolo" styleClass="img-responsive" />
+                  <h:graphicImage url="http://localhost:8080/imagens/#{prod.imagens[0].nomeArquivo}" 
+				  alt="#{prod.imagens[0].legenda}" 
+				  styleClass="img-responsive" />
                   <div class="caption">
                     <h2><h:outputText value="#{prod.nome}" /></h2>
                     <p><h:outputText value="#{prod.descricao}" /></p>

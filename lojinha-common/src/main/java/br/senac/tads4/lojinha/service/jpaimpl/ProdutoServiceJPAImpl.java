@@ -24,9 +24,16 @@
 package br.senac.tads4.lojinha.service.jpaimpl;
 
 import br.senac.tads4.lojinha.entidade.Categoria;
+import br.senac.tads4.lojinha.entidade.ImagemProduto;
 import br.senac.tads4.lojinha.entidade.Produto;
 import br.senac.tads4.lojinha.service.ProdutoService;
+import java.util.Iterator;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 /**
  *
@@ -34,9 +41,24 @@ import java.util.List;
  */
 public class ProdutoServiceJPAImpl implements ProdutoService {
 
+  private EntityManagerFactory emFactory
+	  = Persistence.createEntityManagerFactory("LojinhaPU");
+
   @Override
   public List<Produto> listar(int offset, int quantidade) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    EntityManager em = emFactory.createEntityManager();
+    try {
+      // Query JPQL
+      Query query = em.createQuery(
+	      "SELECT DISTINCT p FROM Produto p "
+	      + "LEFT JOIN FETCH p.categorias "
+	      + "LEFT JOIN FETCH p.imagens")
+	      .setFirstResult(offset)
+	      .setMaxResults(quantidade);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
   @Override
@@ -46,22 +68,93 @@ public class ProdutoServiceJPAImpl implements ProdutoService {
 
   @Override
   public Produto obter(long idProduto) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    EntityManager em = emFactory.createEntityManager();
+    try {
+      // Query JPQL
+      Query query = em.createQuery(
+	      "SELECT DISTINCT p FROM Produto p "
+	      + "LEFT JOIN FETCH p.categorias "
+	      + "LEFT JOIN FETCH p.imagens "
+	      + "WHERE p.id = :idProd")
+	      .setParameter("idProd", idProduto);
+      return (Produto) query.getSingleResult();
+    } finally {
+      em.close();
+    }
   }
 
   @Override
   public void incluir(Produto p) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    EntityManager em = emFactory.createEntityManager();
+    EntityTransaction transacao = em.getTransaction();
+    try {
+      transacao.begin();
+      // Loop para fazer "attach" dos objetos Categoria no
+      // EntityManager, para evitar a criação de categorias com 
+      // nomes duplicados
+      for (Categoria c : p.getCategorias()) {
+	if (c.getId() != null) {
+	  em.merge(c);
+	} else {
+	  em.persist(c);
+	}
+      }
+      em.persist(p);
+      transacao.commit();
+    } catch (Exception e) {
+      transacao.rollback();
+    } finally {
+      em.close();
+    }
   }
 
   @Override
   public void alterar(Produto p) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    EntityManager em = emFactory.createEntityManager();
+    EntityTransaction transacao = em.getTransaction();
+    try {
+      transacao.begin();
+      // Loop para fazer "attach" dos objetos Categoria no
+      // EntityManager, para evitar a criação de categorias com 
+      // nomes duplicados
+      for (Categoria c : p.getCategorias()) {
+	if (c.getId() != null) {
+	  em.merge(c);
+	} else {
+	  em.persist(c);
+	}
+      }
+      //Produto prodAlterado = (Produto) em.merge(p);
+      em.merge(p);
+      transacao.commit();
+    } catch (Exception e) {
+      transacao.rollback();
+    } finally {
+      em.close();
+    }
   }
 
   @Override
   public void remover(long idProduto) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    EntityManager em = emFactory.createEntityManager();
+    EntityTransaction transacao = em.getTransaction();
+    try {
+      transacao.begin();
+      Produto p = em.find(Produto.class, idProduto);
+      List<ImagemProduto> imagens = p.getImagens();
+      for (Iterator<ImagemProduto> i = imagens.iterator(); 
+	      i.hasNext(); ) {
+	ImagemProduto imagem = i.next();
+	em.remove(imagem);
+      }
+      p.setCategorias(null);
+      em.remove(p);
+      transacao.commit();
+    } catch (Exception e) {
+      transacao.rollback();
+    } finally {
+      em.close();
+    }
   }
-  
+
 }

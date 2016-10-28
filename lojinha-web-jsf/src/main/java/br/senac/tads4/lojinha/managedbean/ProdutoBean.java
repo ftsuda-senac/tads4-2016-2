@@ -25,7 +25,7 @@ package br.senac.tads4.lojinha.managedbean;
 
 import br.senac.tads4.lojinha.entidade.Produto;
 import br.senac.tads4.lojinha.service.ProdutoService;
-import br.senac.tads4.lojinha.service.fakeimpl.ProdutoServiceFakeImpl;
+import br.senac.tads4.lojinha.service.jpaimpl.ProdutoServiceJPAImpl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +49,8 @@ public class ProdutoBean implements Serializable {
   }
 
   public List<Produto> getLista() {
-    ProdutoService service = new ProdutoServiceFakeImpl();
-    return service.listar(0, 1000);
+    ProdutoService service = new ProdutoServiceJPAImpl();
+    return service.listar(0, 100);
   }
 
   public Produto getProduto() {
@@ -66,7 +66,7 @@ public class ProdutoBean implements Serializable {
   }
 
   private Produto obter(long idProduto) {
-    ProdutoService service = new ProdutoServiceFakeImpl();
+    ProdutoService service = new ProdutoServiceJPAImpl();
     return service.obter(idProduto);
   }
 
@@ -82,6 +82,13 @@ public class ProdutoBean implements Serializable {
 
   public void setIdProduto(Long idProduto) {
     this.idProduto = idProduto;
+  }
+  
+  public String remover(Long idProd) {
+    ProdutoService service = new ProdutoServiceJPAImpl();
+    System.out.println("idProd: " + idProd);
+    service.remover(idProd);
+    return "/lista.xhtml?faces-redirect=true";
   }
 
 }
