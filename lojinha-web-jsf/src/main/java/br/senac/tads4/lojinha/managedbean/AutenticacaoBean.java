@@ -24,9 +24,11 @@
 package br.senac.tads4.lojinha.managedbean;
 
 import br.senac.tads4.lojinha.entidade.Usuario;
+import br.senac.tads4.lojinha.entidade.UsuarioSistema;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Arrays;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +41,11 @@ import javax.servlet.http.HttpServletRequest;
 @SessionScoped
 public class AutenticacaoBean implements Serializable {
 
-  private Usuario usuario = null;
+  private UsuarioSistema usuario = null;
+
+  private static final UsuarioSistema REFERENCIA
+	  = new UsuarioSistema("fulano", "abcd1234",
+		  new String[]{"COMUM"});
 
   private String nome;
 
@@ -51,27 +57,27 @@ public class AutenticacaoBean implements Serializable {
   public String autenticar() {
     // Verifica se usuario/senha são validos
     // Se for valido, apresenta lista de produtos e dados do usuario
-    if ("fulano".equals(nome.trim().toLowerCase())
-	    && "abcd1234".equals(senha.trim())) {
-      usuario = new Usuario();
-      usuario.setNome("Fulano da Silva");
-      nome = null;
-      senha = null;
-      return "/lista.xhtml?faces-redirect=true";
+
+    boolean autenticado
+	    = REFERENCIA.autenticar(this.nome, this.senha);
+
+    if (autenticado) {
+      this.usuario = REFERENCIA;
+      return "/admin/pagina-admin.xhtml?faces-redirect=true";
     }
-    
-    // Deu erro no login. Apresenta uma mensagem de erro
-    FacesMessage msg = new FacesMessage("Erro de login", "Erro");
+    // Em caso de erro
+    FacesMessage msg
+	    = new FacesMessage("Erro de login", "ERROR_MSG");
     msg.setSeverity(FacesMessage.SEVERITY_ERROR);
     FacesContext.getCurrentInstance().addMessage(null, msg);
-    return "/login.xhtml?faces-redirect=true";
+    return "/login.xhtml";
   }
 
-  public Usuario getUsuario() {
+  public UsuarioSistema getUsuario() {
     return usuario;
   }
 
-  public void setUsuario(Usuario usuario) {
+  public void setUsuario(UsuarioSistema usuario) {
     this.usuario = usuario;
   }
 
@@ -94,10 +100,12 @@ public class AutenticacaoBean implements Serializable {
   public boolean isAutenticado() {
     return usuario != null;
   }
-  
+
   public String sair() {
     usuario = null;
-    HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+    HttpServletRequest req = (HttpServletRequest) 
+	    FacesContext.getCurrentInstance()
+		    .getExternalContext().getRequest();
     req.getSession().invalidate();
     return "/lista.xhtml?faces-redirect=true";
   }

@@ -23,6 +23,8 @@
  */
 package br.senac.tads4.lojinha.listener;
 
+import br.senac.tads4.lojinha.entidade.UsuarioSistema;
+import br.senac.tads4.lojinha.managedbean.AutenticacaoBean;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -38,15 +40,47 @@ public class AutorizacaoFilter implements PhaseListener {
 
   @Override
   public void afterPhase(PhaseEvent event) {
-    FacesContext fc = FacesContext.getCurrentInstance();
+    
+    FacesContext fc = event.getFacesContext();
+    
+    AutenticacaoBean autenticacaoBean = fc.getApplication()
+	    .evaluateExpressionGet(fc, "#{autenticacaoBean}", 
+		    AutenticacaoBean.class);
     
     String paginaAtual = fc.getViewRoot().getViewId();
+    
+    NavigationHandler nh = fc.getApplication()
+	    .getNavigationHandler();
+    
+    // Filtrando acessos às páginas protegidas dentro do /admin
+    if (paginaAtual.contains("/admin/")) {
+      
+      // Verificar se usuario autenticou-se
+      if (autenticacaoBean == null 
+	      || autenticacaoBean.getUsuario() == null) {
+	// Significa que usuário nao fez autenticação
+	nh.handleNavigation(fc, null, "/login.xhtml?faces-redirect=true");
+	return;
+      }
+      
+      // Significa que usuário fez autenticação.
+      // Validar se usuário tem permissões necessárias para acessar a página.
+      if (!verificarAcesso(autenticacaoBean.getUsuario(), 
+	      paginaAtual)) {
+	nh.handleNavigation(fc, null, 
+		"/erro-nao-autorizado.xhtml?faces-redirect=true");
+	return;
+      }
+      // Se chegou neste ponto, JSF prossegue com o processamento
+      // normal da requisição.
+    }
+
     
     HttpServletRequest req
 	    = (HttpServletRequest) fc.getExternalContext()
 		    .getRequest();
     System.out.println("Pagina atual: " + paginaAtual
-	    + " ip:" + req.getRemoteAddr());    
+	    + " ip:" + req.getRemoteAddr()); 
     
 //    if (paginaAtual == null || !paginaAtual.contains("login.xhtml")) {
 //      NavigationHandler nh = fc
@@ -63,6 +97,25 @@ public class AutorizacaoFilter implements PhaseListener {
   @Override
   public PhaseId getPhaseId() {
     return PhaseId.RESTORE_VIEW;
+  }
+  
+  private static 
+	boolean verificarAcesso(UsuarioSistema usuario,
+		String pagina) {
+	  
+    // Verifica se esta acessando a página produto-form e
+    // tem perfil ADMIN
+    if (pagina.lastIndexOf("produto-form.xhtml") > -1
+	    && usuario.autorizado("ADMIN")) {
+      return true;
+      
+    // Verifica se tem perfil COMUM, mínimo para acessar
+    // ambiente /admin
+    } else if (pagina.lastIndexOf("pagina-admin.xhtml") > -1
+	    && usuario.autorizado("COMUM")) {
+      return true;
+    }
+    return false;
   }
 
 }
