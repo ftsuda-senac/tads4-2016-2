@@ -21,11 +21,11 @@
       </ui:insert>
       <div class="row">
 	<p>
-	  Qtde itens no carrinho: 
+	  <h:outputText value="#{msgs['carrinho.quantidade']}" />
 	  <h:outputText value="#{compraBean.quantidadeItens}" />
 	</p>
         <nav class="col-md-2 hidden-sm hidden-xs">
-          <h3>Categorias</h3>
+          <h3><h:outputText value="#{msgs.categoria}"/></h3>
           <ul class="list-group">
             <ui:repeat value="#{categoriaBean.lista}" var="cat">
               <li class="list-group-item">

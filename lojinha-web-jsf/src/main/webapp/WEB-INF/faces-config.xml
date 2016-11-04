@@ -4,6 +4,19 @@
 	      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	      xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
+  <application>
+    <locale-config>
+      <default-locale>en-US</default-locale>
+      <supported-locale>pt-BR</supported-locale>
+    </locale-config>
+    <resource-bundle>
+      <!-- Nome do arquivo -->
+      <base-name>br.senac.tads4.lojinha.mensagens.messages</base-name>
+      <!-- Nome da variável usada nas telas -->
+      <var>msgs</var>
+    </resource-bundle>
+  </application>
+
   <lifecycle>
     <phase-listener>
       br.senac.tads4.lojinha.listener.AutorizacaoFilter
