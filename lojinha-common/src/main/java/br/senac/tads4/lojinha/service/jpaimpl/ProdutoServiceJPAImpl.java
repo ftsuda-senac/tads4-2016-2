@@ -24,11 +24,10 @@
 package br.senac.tads4.lojinha.service.jpaimpl;
 
 import br.senac.tads4.lojinha.entidade.Categoria;
-import br.senac.tads4.lojinha.entidade.ImagemProduto;
 import br.senac.tads4.lojinha.entidade.Produto;
 import br.senac.tads4.lojinha.service.ProdutoService;
-import java.util.Iterator;
 import java.util.List;
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -39,6 +38,7 @@ import javax.persistence.Query;
  *
  * @author fernando.tsuda
  */
+@Default
 public class ProdutoServiceJPAImpl implements ProdutoService {
 
   private EntityManagerFactory emFactory

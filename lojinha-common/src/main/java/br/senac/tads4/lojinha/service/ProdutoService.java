@@ -25,13 +25,14 @@ package br.senac.tads4.lojinha.service;
 
 import br.senac.tads4.lojinha.entidade.Categoria;
 import br.senac.tads4.lojinha.entidade.Produto;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author fernando.tsuda
  */
-public interface ProdutoService {
+public interface ProdutoService extends Serializable {
 
   public List<Produto> listar(int offset, int quantidade);
 

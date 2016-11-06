@@ -24,13 +24,14 @@
 package br.senac.tads4.lojinha.service;
 
 import br.senac.tads4.lojinha.entidade.Categoria;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Fernando
  */
-public interface CategoriaService {
+public interface CategoriaService extends Serializable {
 
   public List<Categoria> listar();
 
