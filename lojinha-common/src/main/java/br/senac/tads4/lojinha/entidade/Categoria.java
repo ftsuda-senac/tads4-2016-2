@@ -34,6 +34,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,6 +45,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TB_CATEGORIA")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Categoria implements Serializable {
 
   @Id
@@ -52,6 +58,7 @@ public class Categoria implements Serializable {
   private String nome;
 
   @ManyToMany(mappedBy = "categorias", fetch = FetchType.LAZY)
+  @XmlTransient
   private List<Produto> produtos;
 
   public Categoria() {
