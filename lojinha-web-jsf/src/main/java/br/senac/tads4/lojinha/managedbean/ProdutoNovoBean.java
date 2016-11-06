@@ -28,8 +28,6 @@ import br.senac.tads4.lojinha.entidade.ImagemProduto;
 import br.senac.tads4.lojinha.entidade.Produto;
 import br.senac.tads4.lojinha.service.CategoriaService;
 import br.senac.tads4.lojinha.service.ProdutoService;
-import br.senac.tads4.lojinha.service.jpaimpl.CategoriaServiceJPAImpl;
-import br.senac.tads4.lojinha.service.jpaimpl.ProdutoServiceJPAImpl;
 import br.senac.tads4.lojinha.util.Mensagem;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,6 +43,7 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 
@@ -55,6 +54,12 @@ import javax.servlet.http.Part;
 @Named
 @ViewScoped
 public class ProdutoNovoBean implements Serializable {
+
+  @Inject
+  private CategoriaService categoriaService;
+
+  @Inject
+  private ProdutoService produtoService;
 
   private String nome;
   private String descricao;
@@ -67,13 +72,12 @@ public class ProdutoNovoBean implements Serializable {
 
   public String salvar() {
     Produto p = new Produto();
-    CategoriaService cServ = new CategoriaServiceJPAImpl();
 
     p.setNome(nome);
     p.setDescricao(descricao);
     List<Categoria> listaCategorias = new ArrayList<Categoria>();
     for (int idCat : idsCategorias) {
-      Categoria cat = cServ.obter(idCat);
+      Categoria cat = categoriaService.obter(idCat);
       listaCategorias.add(cat);
       cat.setProdutos(Arrays.asList(p));
     }
@@ -90,13 +94,12 @@ public class ProdutoNovoBean implements Serializable {
       p.setImagens(Arrays.asList(img));
     }
 
-    ProdutoService produtoService = new ProdutoServiceJPAImpl();
     produtoService.incluir(p);
 
     Flash flash = FacesContext.getCurrentInstance()
             .getExternalContext().getFlash();
-    flash.put("mensagem", new Mensagem("Produto '" 
-            + p.getNome() 
+    flash.put("mensagem", new Mensagem("Produto '"
+            + p.getNome()
             + "' cadastrado com sucesso", "success"));
     return "/lista.xhtml?faces-redirect=true";
   }
@@ -106,12 +109,12 @@ public class ProdutoNovoBean implements Serializable {
       String partHeader = imagem.getHeader("content-disposition");
       for (String content : partHeader.split(";")) {
         if (content.trim().startsWith("filename")) {
-          String nomeArquivo = 
-                  content.substring(content.indexOf('=') + 1)
+          String nomeArquivo
+                  = content.substring(content.indexOf('=') + 1)
                   .trim().replace("\"", "");
           int lastFilePartIndex = nomeArquivo.lastIndexOf("\\");
           if (lastFilePartIndex > 0) {
-            return nomeArquivo.substring(lastFilePartIndex, 
+            return nomeArquivo.substring(lastFilePartIndex,
                     nomeArquivo.length());
           }
           return nomeArquivo;
