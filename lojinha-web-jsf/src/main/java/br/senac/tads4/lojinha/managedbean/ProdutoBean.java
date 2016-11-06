@@ -25,13 +25,13 @@ package br.senac.tads4.lojinha.managedbean;
 
 import br.senac.tads4.lojinha.entidade.Produto;
 import br.senac.tads4.lojinha.service.ProdutoService;
-import br.senac.tads4.lojinha.service.jpaimpl.ProdutoServiceJPAImpl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 
 /**
  *
@@ -41,15 +41,17 @@ import javax.faces.context.FacesContext;
 @RequestScoped
 public class ProdutoBean implements Serializable {
 
+  @Inject
+  private ProdutoService service;
+
   private Long idProduto;
-  
+
   private Produto produto = null;
 
   public ProdutoBean() {
   }
 
   public List<Produto> getLista() {
-    ProdutoService service = new ProdutoServiceJPAImpl();
     return service.listar(0, 100);
   }
 
@@ -66,13 +68,12 @@ public class ProdutoBean implements Serializable {
   }
 
   private Produto obter(long idProduto) {
-    ProdutoService service = new ProdutoServiceJPAImpl();
     return service.obter(idProduto);
   }
 
   private Long getIdParam(FacesContext fc) {
     Map<String, String> params = fc.getExternalContext()
-	    .getRequestParameterMap();
+            .getRequestParameterMap();
     return Long.parseLong(params.get("id"));
   }
 
@@ -83,9 +84,8 @@ public class ProdutoBean implements Serializable {
   public void setIdProduto(Long idProduto) {
     this.idProduto = idProduto;
   }
-  
+
   public String remover(Long idProd) {
-    ProdutoService service = new ProdutoServiceJPAImpl();
     System.out.println("idProd: " + idProd);
     service.remover(idProd);
     return "/lista.xhtml?faces-redirect=true";

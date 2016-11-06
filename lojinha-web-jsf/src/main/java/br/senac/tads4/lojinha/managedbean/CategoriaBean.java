@@ -25,11 +25,10 @@ package br.senac.tads4.lojinha.managedbean;
 
 import br.senac.tads4.lojinha.entidade.Categoria;
 import br.senac.tads4.lojinha.service.CategoriaService;
-import br.senac.tads4.lojinha.service.fakeimpl.CategoriaServiceFakeImpl;
-import br.senac.tads4.lojinha.service.jpaimpl.CategoriaServiceJPAImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -39,12 +38,14 @@ import javax.inject.Named;
 @Named
 @ApplicationScoped
 public class CategoriaBean implements Serializable {
+  
+  @Inject
+  private CategoriaService service;
 
   public CategoriaBean() {
   }
 
   public List<Categoria> getLista() {
-    CategoriaService service = new CategoriaServiceJPAImpl();
     return service.listar();
   }
 }
